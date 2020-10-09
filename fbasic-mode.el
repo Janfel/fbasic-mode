@@ -5,7 +5,7 @@
 ;; Author: Jan Felix Langenbach <http://github/janfel>
 ;; Maintainer: Jan Felix Langenbach <o.hase3@gmail.com>
 ;; Created: 2020-10-02
-;; Modified: 2020-10-08
+;; Modified: 2020-10-09
 ;; Version: 0.0.1
 ;; Keywords: languages
 ;; Homepage: https://github.com/janfel/fbasic-mode
@@ -55,12 +55,12 @@
     "LET" "LIB" "LINE" "LOCAL" "LOCK" "LOOP" "LPRINT" "LPT" "MOD" "NAKED"
     "NAMESPACE" "NEW" "NEXT" "NOGOSUB" "NOKEYWORD" "NOT" "ON" "OPEN" "OPERATOR"
     "OPTION" "OR" "ORELSE" "OUTPUT" "OVERLOAD" "PAINT" "PALETTE" "PASCAL" "PIPE"
-    "POINT" "PRESERVE" "PRESET" "PRINT" "PRIVATE" "PROPERTY" "PROTECTED" "PSET"
-    "PUBLIC" "PUT" "PROCPTR" "RANDOM" "READ" "REDIM" "REM" "RESTORE" "RESUME"
-    "RETURN" "SADD" "SCOPE" "SCREEN" "SCRN" "SELECT" "SHL" "SHR" "SIZEOF"
-    "STDCALL" "STEP" "STRPTR" "SUB" "THEN" "THIS" "TO" "TRANS" "TYPE" "TYPEOF"
-    "UNION" "UNLOCK" "UNTIL" "USING" "VARPTR" "WEND" "WHILE" "WIDTH" "WINDOW"
-    "WITH" "WRITE" "XOR"))
+    "PRESERVE" "PRESET" "PRINT" "PRIVATE" "PROPERTY" "PROTECTED" "PSET" "PUBLIC"
+    "PUT" "PROCPTR" "RANDOM" "READ" "REDIM" "REM" "RESTORE" "RESUME" "RETURN"
+    "SADD" "SCOPE" "SCREEN" "SCRN" "SELECT" "SHL" "SHR" "SIZEOF" "STDCALL"
+    "STEP" "STRPTR" "SUB" "THEN" "THIS" "TO" "TRANS" "TYPE" "TYPEOF" "UNION"
+    "UNLOCK" "UNTIL" "USING" "VARPTR" "WEND" "WHILE" "WIDTH" "WINDOW" "WITH"
+    "WRITE" "XOR"))
 
 (defconst fbasic-builtin-keywords
   '("Abs" "Acos" "Allocate" "Asc" "Asin" "Atan2" "Atn" "BLoad" "BSave" "Beep"
@@ -77,9 +77,9 @@
     "ImageCreate" "ImageDestroy" "ImageInfo" "InKey" "InStr" "InStrRev" "Inp"
     "Int" "IsDate" "Kill" "LBound" "LCase" "LPos" "LSet" "LTrim" "Lang" "Left"
     "Len" "Loc" "Locate" "Lof" "Log" "Mid" "Minute" "MkDir" "MkLongInt"
-    "MkShort" "Mkd" "Mki" "Mkl" "Mks" "Month" "Monthname" "MultiKey"
+    "MkShort" "Mkd" "Mki" "Mkl" "Mks" "Month" "MonthName" "MultiKey"
     "MutexCreate" "MutexDestroy" "MutexLock" "MutexUnlock" "Name" "Now" "Oct"
-    "Out" "PCopy" "PMap" "Peek" "Poke" "Pos" "RSet" "RTrim" "Randomize"
+    "Out" "PCopy" "PMap" "Peek" "Point" "Poke" "Pos" "RSet" "RTrim" "Randomize"
     "Reallocate" "Reset" "Right" "RmDir" "Rnd" "Run" "ScreenControl"
     "ScreenCopy" "ScreenEvent" "ScreenGLProc" "ScreenInfo" "ScreenList"
     "ScreenLock" "ScreenPtr" "ScreenRes" "ScreenSet" "ScreenSync" "ScreenUnlock"
@@ -88,7 +88,7 @@
     "Tab" "Tan" "ThreadCreate" "ThreadWait" "Time" "TimeSerial" "TimeValue"
     "Timer" "Trim" "UBound" "UCase" "Val" "ValInt" "ValLng" "ValUInt" "ValULng"
     "Var" "View" "WBin" "WChr" "WHex" "WInput" "WOct" "WSpace" "WStr" "Wait"
-    "WeekDay" "WeekDayName" "WindowTitle" "Year"))
+    "Weekday" "WeekdayName" "WindowTitle" "Year"))
 
 (defconst fbasic-type-keywords
   '("Any" "Boolean" "Byte" "Double" "Integer" "Long" "LongInt" "Object"
