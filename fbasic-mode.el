@@ -515,6 +515,29 @@ the match data.")
 
 
 ;; FBasic Mode
+
+(defun fbasic-open-block (type)
+  "Create a block of TYPE around the current line or region."
+  (interactive "sBlock type: ")
+  (setq type (upcase type))
+  (let ((open (format "%s\n" type))
+        (close (format "END %s\n" type))
+        (pos (point-marker))
+        (beg (line-beginning-position))
+        (end (line-end-position)))
+    (when (region-active-p)
+      (setq beg (progn (goto-char (region-beginning)) (line-beginning-position)))
+      (setq end (progn (goto-char (region-end)) (line-end-position))))
+    (goto-char end)
+    (newline)
+    (insert close)
+    (setq end (point-marker))
+    (goto-char beg)
+    (when (= beg pos) (set-marker-insertion-type pos t))
+    (insert open)
+    (indent-region beg end)
+    (goto-char pos)))
+
 (defun fbasic-indent-new-comment-line (&optional soft)
   "Break the current line onto a new comment line.
 Use soft linebreaks when SOFT is non-nil."
@@ -532,6 +555,11 @@ Use soft linebreaks when SOFT is non-nil."
            (comment-indent-new-line soft))
           (t (newline-and-indent)))))
 
+(defvar fbasic-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c C-b") #'fbasic-open-block)
+    map)
+  "Keymap for `fbasic-mode'.")
 
 ;;;###autoload
 (define-derived-mode fbasic-mode prog-mode "FreeBASIC"
