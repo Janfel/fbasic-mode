@@ -27,11 +27,12 @@
 ;; the official website at https://fbide.freebasic.net/.
 
 (defconst fbasic-constant-keywords
-  '("__DATE__" "__FB_ARGC__" "__FB_ARGV__" "__FB_BACKEND__" "__FB_BIGENDIAN__"
+  '("__DATE__" "__DATE_ISO__" "__FB_64BIT__" "__FB_ARGC__" "__FB_ARGV__"
+    "__FB_ARM__" "__FB_ASM__" "__FB_BACKEND__" "__FB_BIGENDIAN__"
     "__FB_BUILD_DATE__" "__FB_CYGWIN__" "__FB_DARWIN__" "__FB_DEBUG__"
     "__FB_DOS__" "__FB_ERR__" "__FB_FPMODE__" "__FB_FPU__" "__FB_FREEBSD__"
-    "__FB_LANG__" "__FB_LINUX__" "__FB_MAIN__" "__FB_MIN_VERSION__" "__FB_MT__"
-    "__FB_NETBSD__" "__FB_OPENBSD__" "__FB_OPTION_BYVAL__"
+    "__FB_GCC__" "__FB_LANG__" "__FB_LINUX__" "__FB_MAIN__" "__FB_MIN_VERSION__"
+    "__FB_MT__" "__FB_NETBSD__" "__FB_OPENBSD__" "__FB_OPTION_BYVAL__"
     "__FB_OPTION_DYNAMIC__" "__FB_OPTION_ESCAPE__" "__FB_OPTION_EXPLICIT__"
     "__FB_OPTION_GOSUB__" "__FB_OPTION_PRIVATE__" "__FB_OUT_DLL__"
     "__FB_OUT_EXE__" "__FB_OUT_LIB__" "__FB_OUT_OBJ__" "__FB_PCOS__"
