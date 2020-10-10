@@ -95,6 +95,12 @@
     "Pointer" "Ptr" "Shared" "Short" "Single" "Static" "String" "UByte"
     "UInteger" "ULong" "ULongInt" "Unsigned" "UShort" "WString" "ZString"))
 
+(defconst fbasic--combined-keyword-list
+  (append fbasic-keywords
+          fbasic-constant-keywords
+          fbasic-builtin-keywords
+          fbasic-type-keywords))
+
 
 ;; Variables
 
@@ -118,10 +124,7 @@
   :group 'fbasic)
 
 (defcustom fbasic-autocaps-keywords
-  (append fbasic-keywords
-          fbasic-constant-keywords
-          fbasic-builtin-keywords
-          fbasic-type-keywords)
+  fbasic--combined-keyword-list
   "The list of keywords that should be transformed (not case sensitive)."
   :type '(repeat string)
   :group 'fbasic-autocaps)
