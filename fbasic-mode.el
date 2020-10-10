@@ -427,7 +427,22 @@ the match data.")
     (remove-hook 'post-self-insert-hook #'fbasic-autocaps-post-self-insert-function t)))
 
 
-;; FBasic Mode
+;; Syntax Table
+
+(defvar fbasic-mode-syntax-table
+  (let ((table (make-syntax-table)))
+    (mapc (lambda (c) (modify-syntax-entry c "." table))
+          '(?% ?* ?< ?= ?> ?\\ ?|))
+    (modify-syntax-entry ?'   "< 23"   table)
+    (modify-syntax-entry ?/   ". 14cn" table)
+    (modify-syntax-entry ?\n  ">"   table)
+    (modify-syntax-entry ?$   "'"   table)
+    (modify-syntax-entry ?!   "'"   table)
+    (modify-syntax-entry ?&   "'"   table)
+    (modify-syntax-entry ?_   "_"   table)
+    ;; MAYBE: REM and line numbers using Syntax Properties.
+    table)
+  "Syntax table used while in `fbasic-mode'.")
 
 (defun fbasic-syntax-propertize-function (beg end)
   "Propertize the text from BEG to END."
@@ -475,6 +490,8 @@ the match data.")
        ;; would require changing `fbasic-calculate-indent' anyway.
        ))))
 
+
+;; FBasic Mode
 (defun fbasic-indent-new-comment-line (&optional soft)
   "Break the current line onto a new comment line.
 Use soft linebreaks when SOFT is non-nil."
@@ -491,21 +508,6 @@ Use soft linebreaks when SOFT is non-nil."
           ((eq (nth 4 (save-excursion (syntax-ppss))) t)
            (comment-indent-new-line soft))
           (t (newline-and-indent)))))
-
-(defvar fbasic-mode-syntax-table
-  (let ((table (make-syntax-table)))
-    (mapc (lambda (c) (modify-syntax-entry c "." table))
-          '(?% ?* ?< ?= ?> ?\\ ?|))
-    (modify-syntax-entry ?'   "< 23"   table)
-    (modify-syntax-entry ?/   ". 14cn" table)
-    (modify-syntax-entry ?\n  ">"   table)
-    (modify-syntax-entry ?$   "'"   table)
-    (modify-syntax-entry ?!   "'"   table)
-    (modify-syntax-entry ?&   "'"   table)
-    (modify-syntax-entry ?_   "_"   table)
-    ;; MAYBE: REM and line numbers using Syntax Properties.
-    table)
-  "Syntax table used while in `fbasic-mode'.")
 
 (defun fbasic-completion-at-point ()
   "Function used for `completion-at-point-functions' in `fbasic-mode'."
