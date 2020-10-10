@@ -507,6 +507,20 @@ Use soft linebreaks when SOFT is non-nil."
     table)
   "Syntax table used while in `fbasic-mode'.")
 
+(defun fbasic-completion-at-point ()
+  "Function used for `completion-at-point-functions' in `fbasic-mode'."
+  (with-syntax-table fbasic-mode-syntax-table
+    (unless (fbasic-in-comment-or-string-p)
+      (let ((beg (progn (forward-symbol -1) (point)))
+            (end (progn (forward-symbol +1) (point)))
+            (keywords fbasic--combined-keyword-list)
+            (anno-func
+             (lambda (str)
+               (cond ((string-match-p fbasic-keyword-regexp str) " <k>")
+                     ((string-match-p fbasic-builtin-keyword-regexp str) " <b>")
+                     ((string-match-p fbasic-constant-regexp str) " <d>")))))
+        (list beg end keywords :annotation-function anno-func)))))
+
 ;;;###autoload
 (define-derived-mode fbasic-mode prog-mode "FreeBASIC"
   "Major mode for editing FreeBASIC code.
@@ -514,6 +528,7 @@ Use soft linebreaks when SOFT is non-nil."
 \\{fbasic-mode-map}"
   :group 'fbasic
   (setq-local case-fold-search t)
+  (setq-local completion-ignore-case t)
   (setq-local indent-line-function #'fbasic-indent-line)
   (setq-local syntax-propertize-function #'fbasic-syntax-propertize-function)
   (setq-local comment-line-break-function #'fbasic-indent-new-comment-line)
@@ -528,7 +543,8 @@ Use soft linebreaks when SOFT is non-nil."
               (append (when (boundp 'electric-indent-chars)
                         (default-value 'electric-indent-chars))
                       fbasic-electric-indent-chars))
-  (setq-local font-lock-defaults '(fbasic-font-lock-keywords nil t)))
+  (setq-local font-lock-defaults '(fbasic-font-lock-keywords nil t))
+  (add-hook 'completion-at-point-functions #'fbasic-completion-at-point t t))
 
 (add-hook 'fbasic-mode-hook #'fbasic-autocaps-mode)
 ;;;###autoload
