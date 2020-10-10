@@ -242,8 +242,7 @@ the match data.")
 
 (defun fbasic-in-comment-or-string-p (&optional pos)
   "Return non-nil if POS is in a comment or string."
-  (let ((ppss (save-excursion (syntax-ppss (or pos (point))))))
-    (or (ppss-comment-depth ppss) (ppss-string-terminator ppss))))
+  (save-excursion (ppss-comment-or-string-start (syntax-ppss (or pos (point))))))
 
 (defun fbasic-continued-line-p (&optional n)
   "Return non-nil if this line plus N is a continuation line."
