@@ -378,6 +378,23 @@ the match data.")
     ;; This is cleaner than advice.
     (when fbasic-autocaps-mode (fbasic-autocaps-fix-line))))
 
+(defun fbasic-indent-new-comment-line (&optional soft)
+  "Break the current line onto a new comment line.
+Use soft linebreaks when SOFT is non-nil."
+  (interactive)
+  ;; TODO: Handle `fill-prefix' and `soft'.
+  (let ((comment-line-break-function nil))
+    (cond ((save-excursion
+             (back-to-indentation)
+             (looking-at-p fbasic-rem-comment-regexp))
+           (newline-and-indent)
+           (insert "REM ")
+           (when fbasic-autocaps-mode
+             (fbasic-autocaps-fix-last-symbol)))
+          ((eq (nth 4 (save-excursion (syntax-ppss))) t)
+           (comment-indent-new-line soft))
+          (t (newline-and-indent)))))
+
 
 ;; Syntax Table
 
@@ -540,23 +557,6 @@ the match data.")
     (insert open)
     (indent-region beg end)
     (goto-char pos)))
-
-(defun fbasic-indent-new-comment-line (&optional soft)
-  "Break the current line onto a new comment line.
-Use soft linebreaks when SOFT is non-nil."
-  (interactive)
-  ;; TODO: Handle `fill-prefix' and `soft'.
-  (let ((comment-line-break-function nil))
-    (cond ((save-excursion
-             (back-to-indentation)
-             (looking-at-p fbasic-rem-comment-regexp))
-           (newline-and-indent)
-           (insert "REM ")
-           (when fbasic-autocaps-mode
-             (fbasic-autocaps-fix-last-symbol)))
-          ((eq (nth 4 (save-excursion (syntax-ppss))) t)
-           (comment-indent-new-line soft))
-          (t (newline-and-indent)))))
 
 (defvar fbasic-mode-map
   (let ((map (make-sparse-keymap)))
