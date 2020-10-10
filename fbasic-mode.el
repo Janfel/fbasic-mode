@@ -491,6 +491,29 @@ the match data.")
        ))))
 
 
+;; Completion at Point Integration
+
+(defun fbasic--completion-at-point-annotation-function (str)
+  "Annotate STR as required by `completion-at-point-functions'."
+  (declare (side-effect-free t))
+  (cond ((string-match-p fbasic-keyword-regexp str) " <k>")
+        ((string-match-p fbasic-builtin-keyword-regexp str) " <b>")
+        ((string-match-p fbasic-constant-regexp str) " <d>")))
+
+(defun fbasic-completion-at-point ()
+  "Function used for `completion-at-point-functions' in `fbasic-mode'."
+  (with-syntax-table fbasic-mode-syntax-table
+    (when (and (memq (char-syntax (char-before)) '(?w ?_))
+               (not (fbasic-in-comment-or-string-p)))
+      (let ((pos (point))
+            (beg (progn (forward-symbol -1) (point)))
+            (end (progn (forward-symbol +1) (point))))
+        (goto-char pos)
+        (list beg end fbasic-combined-keyword-list
+              :annotation-function
+              #'fbasic--completion-at-point-annotation-function)))))
+
+
 ;; FBasic Mode
 (defun fbasic-indent-new-comment-line (&optional soft)
   "Break the current line onto a new comment line.
@@ -509,19 +532,6 @@ Use soft linebreaks when SOFT is non-nil."
            (comment-indent-new-line soft))
           (t (newline-and-indent)))))
 
-(defun fbasic-completion-at-point ()
-  "Function used for `completion-at-point-functions' in `fbasic-mode'."
-  (with-syntax-table fbasic-mode-syntax-table
-    (unless (fbasic-in-comment-or-string-p)
-      (let ((beg (progn (forward-symbol -1) (point)))
-            (end (progn (forward-symbol +1) (point)))
-            (keywords fbasic--combined-keyword-list)
-            (anno-func
-             (lambda (str)
-               (cond ((string-match-p fbasic-keyword-regexp str) " <k>")
-                     ((string-match-p fbasic-builtin-keyword-regexp str) " <b>")
-                     ((string-match-p fbasic-constant-regexp str) " <d>")))))
-        (list beg end keywords :annotation-function anno-func)))))
 
 ;;;###autoload
 (define-derived-mode fbasic-mode prog-mode "FreeBASIC"
