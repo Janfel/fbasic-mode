@@ -376,57 +376,6 @@ the match data.")
     (when fbasic-autocaps-mode (fbasic-autocaps-fix-line))))
 
 
-;; FBasic Autocaps Mode
-
-(defun fbasic-autocaps-inhibit-fix-p ()
-  "Return non-nil if the word before `point' should not be fixed."
-  (or (fbasic-preprocessor-line-p)
-      (fbasic-in-string-p (point))
-      ;; (fbasic-in-asm-block-p (point))
-      (fbasic-in-comment-p (point))))
-
-(defun fbasic-autocaps-fix-last-symbol ()
-  "Autocapitalize the symbol directly before point."
-  (interactive)
-  (unless (fbasic-autocaps-inhibit-fix-p)
-    (let* ((case-fold-search t)
-           (end (point-marker))
-           (beg (progn (forward-symbol -1) (point))))
-      (when (< beg end)
-        (let* ((sym (buffer-substring-no-properties beg end))
-               (rep (car (member-ignore-case sym fbasic-autocaps-keywords))))
-          (when (and rep (not (string= sym rep)))
-            (set-marker-insertion-type end t)
-            (delete-region beg end)
-            (insert (if (fboundp fbasic-autocaps-transformer-function)
-                        (funcall fbasic-autocaps-transformer-function rep) rep))))
-        (goto-char end)))))
-
-(defun fbasic-autocaps-fix-line ()
-  "Autocapitalize every word on the current line."
-  (interactive)
-  (save-excursion
-    (let ((eol (line-end-position)))
-      (beginning-of-line)
-      (while (and (forward-word-strictly) (<= (point) eol))
-        (fbasic-autocaps-fix-last-symbol)))))
-
-(defun fbasic-autocaps-post-self-insert-function ()
-  "Autocapitalize the last symbol when an electric character is typed."
-  (when (memq last-command-event fbasic-autocaps-electric-chars)
-    (backward-char)
-    (fbasic-autocaps-fix-last-symbol)
-    (forward-char)))
-
-;;;###autoload
-(define-minor-mode fbasic-autocaps-mode
-  "Toggle automatic BASIC keyword capitalization (FBasic Autocaps Mode)."
-  :group 'fbasic-autocaps
-  (if fbasic-autocaps-mode
-      (add-hook 'post-self-insert-hook #'fbasic-autocaps-post-self-insert-function nil t)
-    (remove-hook 'post-self-insert-hook #'fbasic-autocaps-post-self-insert-function t)))
-
-
 ;; Syntax Table
 
 (defvar fbasic-mode-syntax-table
@@ -512,6 +461,57 @@ the match data.")
         (list beg end fbasic-combined-keyword-list
               :annotation-function
               #'fbasic--completion-at-point-annotation-function)))))
+
+
+;; FBasic Autocaps Mode
+
+(defun fbasic-autocaps-inhibit-fix-p ()
+  "Return non-nil if the word before `point' should not be fixed."
+  (or (fbasic-preprocessor-line-p)
+      (fbasic-in-string-p (point))
+      ;; (fbasic-in-asm-block-p (point))
+      (fbasic-in-comment-p (point))))
+
+(defun fbasic-autocaps-fix-last-symbol ()
+  "Autocapitalize the symbol directly before point."
+  (interactive)
+  (unless (fbasic-autocaps-inhibit-fix-p)
+    (let* ((case-fold-search t)
+           (end (point-marker))
+           (beg (progn (forward-symbol -1) (point))))
+      (when (< beg end)
+        (let* ((sym (buffer-substring-no-properties beg end))
+               (rep (car (member-ignore-case sym fbasic-autocaps-keywords))))
+          (when (and rep (not (string= sym rep)))
+            (set-marker-insertion-type end t)
+            (delete-region beg end)
+            (insert (if (fboundp fbasic-autocaps-transformer-function)
+                        (funcall fbasic-autocaps-transformer-function rep) rep))))
+        (goto-char end)))))
+
+(defun fbasic-autocaps-fix-line ()
+  "Autocapitalize every word on the current line."
+  (interactive)
+  (save-excursion
+    (let ((eol (line-end-position)))
+      (beginning-of-line)
+      (while (and (forward-word-strictly) (<= (point) eol))
+        (fbasic-autocaps-fix-last-symbol)))))
+
+(defun fbasic-autocaps-post-self-insert-function ()
+  "Autocapitalize the last symbol when an electric character is typed."
+  (when (memq last-command-event fbasic-autocaps-electric-chars)
+    (backward-char)
+    (fbasic-autocaps-fix-last-symbol)
+    (forward-char)))
+
+;;;###autoload
+(define-minor-mode fbasic-autocaps-mode
+  "Toggle automatic BASIC keyword capitalization (FBasic Autocaps Mode)."
+  :group 'fbasic-autocaps
+  (if fbasic-autocaps-mode
+      (add-hook 'post-self-insert-hook #'fbasic-autocaps-post-self-insert-function nil t)
+    (remove-hook 'post-self-insert-hook #'fbasic-autocaps-post-self-insert-function t)))
 
 
 ;; FBasic Mode
