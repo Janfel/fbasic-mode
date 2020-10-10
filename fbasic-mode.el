@@ -570,6 +570,7 @@ Use soft linebreaks when SOFT is non-nil."
 
 \\{fbasic-mode-map}"
   :group 'fbasic
+  :keymap 'fbasic-mode-map
   (setq-local case-fold-search t)
   (setq-local completion-ignore-case t)
   (setq-local indent-line-function #'fbasic-indent-line)
