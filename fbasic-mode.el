@@ -96,7 +96,7 @@
     "Pointer" "Ptr" "Shared" "Short" "Single" "Static" "String" "UByte"
     "UInteger" "ULong" "ULongInt" "Unsigned" "UShort" "WString" "ZString"))
 
-(defconst fbasic--combined-keyword-list
+(defconst fbasic-combined-keyword-list
   (append fbasic-keywords
           fbasic-constant-keywords
           fbasic-builtin-keywords
@@ -124,8 +124,7 @@
   "Automatic capitalization for FreeBASIC keywords."
   :group 'fbasic)
 
-(defcustom fbasic-autocaps-keywords
-  fbasic--combined-keyword-list
+(defcustom fbasic-autocaps-keywords fbasic-combined-keyword-list
   "The list of keywords that should be transformed (not case sensitive)."
   :type '(repeat string)
   :group 'fbasic-autocaps)
