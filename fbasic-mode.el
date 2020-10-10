@@ -536,25 +536,49 @@ Use soft linebreaks when SOFT is non-nil."
 
 ;; FBasic Mode
 
-(defun fbasic-open-block (type)
-  "Create a block of TYPE around the current line or region."
-  (interactive "sBlock type: ")
-  (setq type (upcase type))
-  (let ((open (format "%s\n" type))
-        (close (format "END %s\n" type))
-        (pos (point-marker))
+(defvar fbasic-block-pair-alist
+  (append
+   (mapcar (lambda (str) (list (intern (downcase str)) str (concat "END " str)))
+           fbasic-block-keywords)
+   '((asm "ASM" "END ASM")
+     (extern "EXTERN" "END EXTERN")
+     (if "IF condition THEN" "END IF")
+     (screenlock "ScreenLock" "ScreenUnlock"))))
+
+(defvar evil-visual-selection)
+(defvar evil-visual-beginning)
+(defvar evil-visual-end)
+(defun fbasic-open-block (open &optional close)
+  "Create a block around the current line or region.
+OPEN and CLOSE are strings containing the opening and closing lines of
+the block without trailing newlines.
+If CLOSE is nil, OPEN is a symbol that is an index into
+`fbasic-block-pair-alist'."
+  (interactive
+   (cdr (assq (intern (completing-read "Block type: " fbasic-block-pair-alist nil t))
+              fbasic-block-pair-alist)))
+  (unless close
+    (let ((spec (assq open fbasic-block-pair-alist)))
+      (setq open  (nth 1 spec))
+      (setq close (nth 2 spec))))
+  (let ((pos (point-marker))
         (beg (line-beginning-position))
         (end (line-end-position)))
     (when (region-active-p)
-      (setq beg (progn (goto-char (region-beginning)) (line-beginning-position)))
-      (setq end (progn (goto-char (region-end)) (line-end-position))))
+      (let* ((evil (bound-and-true-p evil-local-mode))
+             (rbeg (if evil evil-visual-beginning (region-beginning)))
+             (rend (if evil (if (eq evil-visual-selection 'line)
+                                (1- evil-visual-end)
+                              evil-visual-end)
+                     (region-end))))
+        (setq beg (progn (goto-char rbeg) (line-beginning-position)))
+        (setq end (progn (goto-char rend) (line-end-position)))))
     (goto-char end)
-    (newline)
-    (insert close)
+    (newline) (insert close) (newline)
     (setq end (point-marker))
-    (goto-char beg)
     (when (= beg pos) (set-marker-insertion-type pos t))
-    (insert open)
+    (goto-char beg)
+    (insert open) (newline)
     (indent-region beg end)
     (goto-char pos)))
 
