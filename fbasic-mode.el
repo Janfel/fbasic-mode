@@ -15,7 +15,7 @@
 ;;
 ;;; Commentary:
 ;;
-;;  Major mode for FreeBASIC
+;; Major mode for FreeBASIC
 ;;
 ;;; Code:
 
@@ -120,8 +120,8 @@
 (defcustom fbasic-autocaps-keywords
   (append fbasic-keywords
           fbasic-constant-keywords
-          fbasic-type-keywords
-          fbasic-builtin-keywords)
+          fbasic-builtin-keywords
+          fbasic-type-keywords)
   "The list of keywords that should be transformed (not case sensitive)."
   :type '(repeat string)
   :group 'fbasic-autocaps)
