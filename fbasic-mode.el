@@ -371,7 +371,10 @@ the match data.")
   (interactive)
   (let* ((old-indent (current-indentation))
          (new-indent (or (fbasic-calculate-indent) old-indent)))
-    (unless (= old-indent new-indent) (indent-line-to new-indent))
+    (unless (= old-indent new-indent)
+      (delete-region (line-beginning-position)
+                     (save-excursion (back-to-indentation) (point)))
+      (indent-line-to new-indent))
     ;; This is cleaner than advice.
     (when fbasic-autocaps-mode (fbasic-autocaps-fix-line))))
 
